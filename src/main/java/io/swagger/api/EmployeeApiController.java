@@ -1,6 +1,5 @@
 package io.swagger.api;
 
-import io.swagger.api.employee.EmployeeService;
 import io.swagger.model.Employee;
 import io.swagger.model.Pet;
 import io.swagger.model.Topic;
@@ -8,7 +7,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -35,21 +33,18 @@ public class EmployeeApiController implements EmployeeApi {
 
     private final HttpServletRequest request;
 
-    private final EmployeeService employeeService;
-
     @org.springframework.beans.factory.annotation.Autowired
-    public EmployeeApiController(ObjectMapper objectMapper, HttpServletRequest request, EmployeeService employeeService) {
+    public EmployeeApiController(ObjectMapper objectMapper, HttpServletRequest request) {
         this.objectMapper = objectMapper;
         this.request = request;
-        this.employeeService = employeeService;
     }
 
     public ResponseEntity<List<Employee>> employeeGet() {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
-                return new ResponseEntity<List<Employee>>(employeeService.getAllEmployees(), HttpStatus.OK);
-            } catch (Exception e) {
+                return new ResponseEntity<List<Employee>>(objectMapper.readValue("[ {\n  \"hireDate\" : \"2000-01-23\",\n  \"isEskimo\" : true,\n  \"name\" : \"name\",\n  \"approximateAge\" : 5,\n  \"ageAtHire\" : 1,\n  \"id\" : 0,\n  \"managerId\" : 6\n}, {\n  \"hireDate\" : \"2000-01-23\",\n  \"isEskimo\" : true,\n  \"name\" : \"name\",\n  \"approximateAge\" : 5,\n  \"ageAtHire\" : 1,\n  \"id\" : 0,\n  \"managerId\" : 6\n} ]", List.class), HttpStatus.NOT_IMPLEMENTED);
+            } catch (IOException e) {
                 log.error("Couldn't serialize response for content type application/json", e);
                 return new ResponseEntity<List<Employee>>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
