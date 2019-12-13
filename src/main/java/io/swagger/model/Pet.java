@@ -13,7 +13,7 @@ import javax.validation.constraints.*;
  * Pet
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-12-02T16:44:07.114Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-12-13T16:47:53.252Z[GMT]")
 public class Pet   {
   @JsonProperty("id")
   private Integer id = null;
